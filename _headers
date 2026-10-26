@@ -1,0 +1,21 @@
+# Netlify settings (read automatically when you drag this folder onto Netlify)
+# Always fetch the newest copy of these, so an update reaches phones right away.
+/sw.js
+  Cache-Control: no-cache
+  Service-Worker-Allowed: /
+/config.js
+  Cache-Control: no-cache
+/shim.js
+  Cache-Control: no-cache
+/admin.js
+  Cache-Control: no-cache
+/*.html
+  Cache-Control: no-cache
+/
+  Cache-Control: no-cache
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+/manifest.webmanifest
+  Content-Type: application/manifest+json

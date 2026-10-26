@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>XLNC Care · Sign in</title>
+<meta name="description" content="XLNC Care — residents, daily notes, meds and homes for XLNC Adult Residential Facilities.">
+<meta name="theme-color" content="#8E5CC4">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="XLNC Care">
+<script>window.XLNC_PAGE = "login";</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="shim.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--purple:#8E5CC4;--deep:#5B2E8C;--ink:#3B2A4A;--muted:#7C6A86;--line:#E6DDE9;--soft:#F3EEF6;--pink:#E58BB7;--bad:#C0392B;--good:#2F7D57;
+  --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;--body:Inter,"Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{min-height:100vh;min-height:100dvh;font:15px/1.5 var(--body);color:var(--ink);
+  background:radial-gradient(70% 45% at 100% 0%,#FFF0B3 0%,transparent 62%),radial-gradient(70% 50% at 0% 100%,#D6E8FF 0%,transparent 66%),linear-gradient(150deg,#FFE1D6 0%,#F7E3F1 45%,#F3D9F2 100%);
+  background-attachment:fixed;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:max(24px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom))}
+main{width:100%;max-width:420px}
+.brand{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:18px}
+.mark{width:76px;height:76px;border-radius:22px;box-shadow:0 14px 30px -14px rgba(91,46,140,.55)}
+.brand h1{margin:12px 0 0;font:800 34px/1 var(--display);color:var(--deep);letter-spacing:.2px}
+.brand p{margin:6px 0 0;font-weight:600;color:var(--muted);font-size:14px}
+.card{background:#fff;border-radius:26px;padding:24px 20px 22px;box-shadow:0 22px 60px -28px rgba(91,46,140,.45),0 1px 0 var(--line)}
+@media (min-width:480px){.card{padding:28px 28px 24px}}
+.card h2{margin:0 0 4px;font:800 23px/1.2 var(--display);color:var(--deep)}
+.card .sub{margin:0 0 16px;color:var(--muted);font-size:14px}
+label{display:block;font-weight:700;font-size:13.5px;margin:12px 0 6px}
+.field{position:relative}
+input[type=email],input[type=password],input[type=text]{width:100%;font:16px var(--body);color:var(--ink);background:#FDFBFE;border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus{border-color:var(--purple);box-shadow:0 0 0 4px #EADCF8}
+.field input{padding-right:64px}
+.peek{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:var(--soft);color:var(--deep);border-radius:10px;padding:7px 10px;font:700 12.5px var(--body);cursor:pointer}
+.go{width:100%;margin-top:18px;border:0;border-radius:999px;padding:14px 18px;font:800 16px var(--body);color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,#8E5CC4,#B06FC9 60%,#E58BB7);box-shadow:0 12px 24px -14px rgba(142,92,196,.9)}
+.go:disabled{opacity:.6;cursor:default}
+.go:focus-visible,.link:focus-visible,.peek:focus-visible{outline:3px solid #C9A6F0;outline-offset:2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.link{border:0;background:none;padding:4px 0;color:var(--purple);font:700 14px var(--body);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.msg{margin:12px 0 0;padding:10px 12px;border-radius:12px;font-weight:600;font-size:14px}
+.msg:empty{display:none}
+.msg.bad{background:#FDECEA;color:var(--bad)}
+.msg.ok{background:#E8F6EE;color:var(--good)}
+.msg.info{background:var(--soft);color:var(--deep)}
+.hint{color:var(--muted);font-size:13px;margin:8px 0 0}
+.foot{margin-top:18px;text-align:center;color:var(--muted);font-size:12.5px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">
+    <img class="mark" src="icons/icon-192.png" alt="">
+    <h1>XLNC Care</h1>
+    <p>Residents · daily notes · meds · homes</p>
+  </div>
+
+  <!-- sign in -->
+  <section class="card" id="vSignin">
+    <h2>Welcome back</h2>
+    <p class="sub">Sign in with the email Laxmi invited.</p>
+    <form id="fSignin" novalidate>
+      <label for="siEmail">Email</label>
+      <input type="email" id="siEmail" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required>
+      <label for="siPass">Password</label>
+      <div class="field"><input type="password" id="siPass" autocomplete="current-password" required><button type="button" class="peek" data-for="siPass">Show</button></div>
+      <button class="go" id="siGo" type="submit">Sign in</button>
+      <p class="msg" id="siMsg" role="alert" aria-live="polite"></p>
+    </form>
+    <div class="row"><button type="button" class="link" id="toForgot">Forgot password?</button></div>
+  </section>
+
+  <!-- forgot -->
+  <section class="card" id="vForgot" hidden>
+    <h2>Reset your password</h2>
+    <p class="sub">We'll email you a link to choose a new password.</p>
+    <form id="fForgot" novalidate>
+      <label for="fpEmail">Email</label>
+      <input type="email" id="fpEmail" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required>
+      <button class="go" id="fpGo" type="submit">Email me a link</button>
+      <p class="msg" id="fpMsg" role="alert" aria-live="polite"></p>
+    </form>
+    <div class="row"><button type="button" class="link" data-back>← Back to sign in</button></div>
+  </section>
+
+  <!-- set new password (from reset or invite email) -->
+  <section class="card" id="vSetpw" hidden>
+    <h2 id="spTitle">Choose a new password</h2>
+    <p class="sub" id="spSub">At least 8 characters. You'll use it to sign in from now on.</p>
+    <form id="fSetpw" novalidate>
+      <label for="spPass">New password</label>
+      <div class="field"><input type="password" id="spPass" autocomplete="new-password" minlength="8" required><button type="button" class="peek" data-for="spPass">Show</button></div>
+      <label for="spPass2">Type it again</label>
+      <input type="password" id="spPass2" autocomplete="new-password" minlength="8" required>
+      <button class="go" id="spGo" type="submit">Save password and continue</button>
+      <p class="msg" id="spMsg" role="alert" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <p class="foot">XLNC Care · San Diego</p>
+</main>
+
+<script>
+(function () {
+  const X = window.XLNC;
+  if (!X || !X.configured || !X.sb) return;          // shim shows "Setup needed" / "Can't load"
+  const sb = X.sb, $ = id => document.getElementById(id);
+
+  // read what the email link put in the address BEFORE the client clears it
+  const H = new URLSearchParams(String(X.initialHash || location.hash).replace(/^#/, ""));
+  const Q = new URLSearchParams(X.initialSearch || location.search);
+  const linkType = H.get("type") || Q.get("type");
+  const linkErr = H.get("error_description") || Q.get("error_description");
+  const linkErrCode = H.get("error_code") || Q.get("error_code");
+
+  const views = ["vSignin", "vForgot", "vSetpw"];
+  function show(v) { for (const x of views) $(x).hidden = x !== v; const f = $(v).querySelector("input"); if (f && matchMedia("(min-width: 700px)").matches) setTimeout(() => f.focus(), 30); }
+  function msg(id, t, kind) { const m = $(id); m.textContent = t || ""; m.className = "msg" + (t ? " " + (kind || "bad") : ""); }
+  const goApp = () => location.replace("app.html");
+  const siteDir = location.origin + location.pathname.replace(/[^/]*$/, "");
+
+  document.querySelectorAll(".peek").forEach(b => b.addEventListener("click", () => {
+    const i = $(b.dataset.for); const s = i.type === "password"; i.type = s ? "text" : "password"; b.textContent = s ? "Hide" : "Show";
+  }));
+  $("toForgot").addEventListener("click", () => { $("fpEmail").value = $("siEmail").value; msg("fpMsg", ""); show("vForgot"); });
+  document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => show("vSignin")));
+
+  function friendly(e) {
+    const m = String((e && e.message) || e || "");
+    if (/invalid login credentials/i.test(m)) return "That email and password don't match. Check for typos, or tap “Forgot password?”.";
+    if (/email not confirmed/i.test(m)) return "This email isn't confirmed yet. Open the invitation email and tap its link first.";
+    if (/rate limit|too many|for security purposes/i.test(m)) return "Too many tries. Please wait a minute and try again.";
+    if (/failed to fetch|network|load failed/i.test(m)) return "Can't reach the server. Check your internet connection and try again.";
+    if (/should be different/i.test(m)) return "Please choose a password you haven't used here before.";
+    if (/at least|weak|short/i.test(m)) return "That password is too short or too easy to guess. Use at least 8 characters.";
+    if (/signups? not allowed|not allowed/i.test(m)) return "This email doesn't have an account. Ask Laxmi to invite you.";
+    return "Something went wrong: " + m;
+  }
+  const validEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+  $("fSignin").addEventListener("submit", async e => {
+    e.preventDefault();
+    const email = $("siEmail").value.trim(), pass = $("siPass").value;
+    if (!validEmail(email)) return msg("siMsg", "Please type your full email address.");
+    if (!pass) return msg("siMsg", "Please type your password.");
+    $("siGo").disabled = true; msg("siMsg", "Signing in…", "info");
+    try {
+      const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+      if (error) throw error;
+      msg("siMsg", "✓ Signed in", "ok"); goApp();
+    } catch (er) { msg("siMsg", friendly(er)); $("siGo").disabled = false; }
+  });
+
+  $("fForgot").addEventListener("submit", async e => {
+    e.preventDefault();
+    const email = $("fpEmail").value.trim();
+    if (!validEmail(email)) return msg("fpMsg", "Please type your full email address.");
+    $("fpGo").disabled = true; msg("fpMsg", "Sending…", "info");
+    try {
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: siteDir + "index.html" });
+      if (error) throw error;
+      msg("fpMsg", "✓ If that email has an account, a reset link is on its way. Check your inbox (and spam).", "ok");
+    } catch (er) { msg("fpMsg", friendly(er)); }
+    $("fpGo").disabled = false;
+  });
+
+  $("fSetpw").addEventListener("submit", async e => {
+    e.preventDefault();
+    const a = $("spPass").value, b = $("spPass2").value;
+    if (a.length < 8) return msg("spMsg", "Use at least 8 characters.");
+    if (a !== b) return msg("spMsg", "The two passwords don't match.");
+    $("spGo").disabled = true; msg("spMsg", "Saving…", "info");
+    try {
+      const { data } = await sb.auth.getSession();
+      if (!data || !data.session) throw new Error("Your link has expired. Tap “Forgot password?” to get a new one.");
+      const { error } = await sb.auth.updateUser({ password: a });
+      if (error) throw error;
+      msg("spMsg", "✓ Password saved", "ok");
+      history.replaceState(null, "", location.pathname);
+      setTimeout(goApp, 400);
+    } catch (er) { msg("spMsg", /expired/.test(er.message) ? er.message : friendly(er)); $("spGo").disabled = false; }
+  });
+
+  function setpwView(kind) {
+    $("spTitle").textContent = kind === "invite" ? "Welcome to XLNC Care 👋" : "Choose a new password";
+    $("spSub").textContent = kind === "invite" ? "Create a password for your account (at least 8 characters)." : "At least 8 characters. You'll use it to sign in from now on.";
+    show("vSetpw");
+  }
+
+  let routed = false;
+  if (linkErr || linkErrCode) {
+    routed = true; show("vSignin");
+    msg("siMsg", /expired|invalid/i.test(linkErr + " " + linkErrCode)
+      ? "That email link has expired or was already used. Tap “Forgot password?” to get a new one, or ask Laxmi to send a new invitation."
+      : "That email link didn't work: " + linkErr);
+    history.replaceState(null, "", location.pathname);
+  } else if (linkType === "recovery" || linkType === "invite") {
+    routed = true; setpwView(linkType);
+  }
+  sb.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") { routed = true; setpwView("recovery"); }
+  });
+  if (!routed) {
+    sb.auth.getSession().then(({ data }) => {
+      if (data && data.session && $("vSetpw").hidden) goApp();   // already signed in
+    }).catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>

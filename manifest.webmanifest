@@ -1,0 +1,17 @@
+{
+  "name": "XLNC Care",
+  "short_name": "XLNC Care",
+  "description": "Residents, daily notes, meds and homes for XLNC Adult Residential Facilities.",
+  "id": "./app.html",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FBF6F9",
+  "theme_color": "#8E5CC4",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
