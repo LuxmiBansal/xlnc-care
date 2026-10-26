@@ -65,11 +65,11 @@
   };
   XLNC.setupScreen = function () {
     XLNC.fullScreen(`<h1>⚙️ Setup needed</h1>
-      <p><b>Put your Supabase URL and key in <code>config.js</code></b>, then upload the folder to Netlify again.</p>
+      <p><b>Put your Supabase URL and key in <code>config.js</code></b>, then save it on GitHub (or send the two values to Claude).</p>
       <ol><li>Open your project at <b>supabase.com</b> → <b>Project Settings</b> → <b>API</b>.</li>
       <li>Copy the <b>Project URL</b> into <code>SUPABASE_URL</code>.</li>
       <li>Copy the <b>anon public</b> key into <code>SUPABASE_ANON_KEY</code>.</li>
-      <li>Save the file and drag the whole folder onto Netlify again.</li></ol>
+      <li>Save <code>config.js</code> in the GitHub repository — the site updates in 1–2 minutes.</li></ol>
       <p>Step-by-step help is in <b>SETUP.md</b> (step 2).</p>`, "setup");
   };
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
