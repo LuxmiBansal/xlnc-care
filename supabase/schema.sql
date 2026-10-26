@@ -23,8 +23,9 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, email, name)
-  values (new.id, new.email, coalesce(new.raw_user_meta_data ->> 'name', split_part(new.email, '@', 1)))
+  insert into public.profiles (id, email, name, role)
+  values (new.id, new.email, coalesce(new.raw_user_meta_data ->> 'name', split_part(new.email, '@', 1)),
+          case when lower(new.email) = 'laxmi@xlncexotic.com' then 'owner' else 'pending' end)   -- Laxmi is the owner automatically
   on conflict (id) do nothing;
   return new;
 end;
@@ -284,4 +285,6 @@ grant select on public.ai_usage to authenticated;
 --    FIRST invite yourself (Authentication → Users → Invite user) and sign in once,
 --    THEN remove the two dashes at the start of the next line and run just that line.
 -- ---------------------------------------------------------------------
--- update public.profiles set role = 'owner' where email = 'laxmi@xlncexotic.com';
+-- (Not needed any more: laxmi@xlncexotic.com becomes owner automatically when her login is created.
+--  If her login already existed before this script ran, this line fixes it.)
+update public.profiles set role = 'owner' where lower(email) = 'laxmi@xlncexotic.com' and role <> 'owner';
